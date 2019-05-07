@@ -2,13 +2,36 @@ package br.edu.ifg.sistemacomercial.entity;
 
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
+@Entity
+@Table(name = "usuario")
 public class Usuario implements Serializable{
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column
+    @NotNull
+    @Size(min = 3)
     private String nome;
+    @NotNull
+    @Size(min = 3)
+    @Column(name="login")
     private String login;
+    @NotNull
+    @Size(min = 3)
     private String senha;
+    @NotNull
+//    @Pattern(regexp = "\\b[\\w.%-]+@[-.\\w]+\\.[A-Za-z]{2,4}\\b")
     private String email;
 
     public Long getId() {

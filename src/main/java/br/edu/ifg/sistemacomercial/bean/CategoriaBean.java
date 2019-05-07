@@ -17,6 +17,5 @@ public class CategoriaBean extends GenericCrud<Categoria, CategoriaLogic>{
     public CategoriaLogic getLogic() {
         return logic;
     }
-   
     
 }

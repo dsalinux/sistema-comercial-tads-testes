@@ -4,10 +4,14 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="template.xhtml">
+                template="template.xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head></h:head><!-- Alguns problemas no layout do Primefaces -->
     <h:form>
-        <p:fieldset legend="Dashboard">
+        <p:fieldset>
+            <f:facet name="legend">
+                <i class='fa fa-tags'></i> Gerenciar Categoria
+            </f:facet>
             <p:toolbar>
                 <p:toolbarGroup>
                     <p:commandButton value="Novo" actionListener="#{categoriaBean.novo()}"
@@ -38,23 +42,23 @@
 
             </p:panelGrid>
 
-            <p:dataTable value="#{categoriaBean.entitys}" var="entity"
+            <p:dataTable value="#{categoriaBean.entitys}" var="user"
                          rendered="#{categoriaBean.statusTela == 'PESQUISANDO'}">
 
                 <p:column headerText="ID">
-                    <h:outputText value="#{entity.id}"></h:outputText>
+                    <h:outputText value="#{user.id}"></h:outputText>
                 </p:column>                    
                 <p:column headerText="Nome">
-                    <h:outputText value="#{entity.nome}"></h:outputText>
+                    <h:outputText value="#{user.nome}"></h:outputText>
                 </p:column>
                 <p:column>
                     <p:commandButton value="Delete" update="@form"
-                                     actionListener="#{categoriaBean.remover(entity)}">
+                                     actionListener="#{categoriaBean.remover(user)}">
                         <p:confirm header="Confirmação" message="Tem certeza que deseja apagar para sempre?" icon="fa fa-exclamation-triangle" />
                     </p:commandButton>
 
                     <p:commandButton value="Editar" update="@form"
-                                     actionListener="#{categoriaBean.editar(entity)}"></p:commandButton>
+                                     actionListener="#{categoriaBean.editar(user)}"></p:commandButton>
                 </p:column>
             </p:dataTable>
             <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">

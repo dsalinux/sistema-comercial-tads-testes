@@ -1,9 +1,7 @@
 package br.edu.ifg.sistemacomercial.bean;
 
-import br.edu.ifg.sistemacomercial.entity.Produto;
-import br.edu.ifg.sistemacomercial.logic.CrudLogic;
+import br.edu.ifg.sistemacomercial.logic.GenericLogic;
 import br.edu.ifg.sistemacomercial.util.JsfUtil;
-import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -12,11 +10,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 
-public abstract class GenericCrud<E extends Serializable, L extends CrudLogic<E, ?>> extends JsfUtil {
+public abstract class GenericCrud<E, L extends GenericLogic<E, ?>> extends JsfUtil {
     
     private E entity;
     private List<E> entitys;
-    private Status statusTela;
+    private Status statusTela;   
     
     private enum Status {
         INSERINDO,
@@ -35,11 +33,10 @@ public abstract class GenericCrud<E extends Serializable, L extends CrudLogic<E,
         try {
             entity = getEntityClass().newInstance();
             statusTela = Status.INSERINDO;
-        } catch (InstantiationException ex) {
-            Logger.getLogger(GenericCrud.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(GenericCrud.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            addMensagemErro(ex.getMessage());
         }
+        
     }
 
     public void adicionar(){
@@ -62,7 +59,6 @@ public abstract class GenericCrud<E extends Serializable, L extends CrudLogic<E,
         }
     }
     public void editar(E entity){
-        //remover(entity);
         this.entity = entity;
         statusTela = Status.EDITANDO;
     }
@@ -73,20 +69,13 @@ public abstract class GenericCrud<E extends Serializable, L extends CrudLogic<E,
                 statusTela = Status.PESQUISANDO;
                 return;
             }
-            entitys = getLogic().buscar(entity);
+            entitys = getLogic().buscar(null);// <-----trocar de entityDAO.listar()
             if(entitys == null || entitys.isEmpty()){
                 addMensagemAviso("Nenhum usuário cadastrado.");
             }
         } catch (Exception ex) {
             addMensagemErro(ex.getMessage());
         }
-    }
-    
-    public Class<E> getEntityClass()
-    {
-        Type type = getClass().getGenericSuperclass();
-        ParameterizedType paramType = (ParameterizedType) type;
-        return (Class<E>) paramType.getActualTypeArguments()[0];
     }
     
     public E getEntity() {
@@ -105,7 +94,13 @@ public abstract class GenericCrud<E extends Serializable, L extends CrudLogic<E,
         return statusTela.name();
     }
 
-    public abstract L getLogic();
+    public Class<E> getEntityClass() {
+        Type type = getClass().getGenericSuperclass();
+        ParameterizedType paramType = (ParameterizedType) type;
+        
+        return (Class<E>) paramType.getActualTypeArguments()[0];        
+    }
     
+    public abstract L getLogic();
     
 }

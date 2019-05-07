@@ -10,7 +10,10 @@
     <h:head></h:head><!-- Alguns problemas no layout do Primefaces -->
     
     <h:form>
-        <p:fieldset legend="Dashboard">
+        <p:fieldset>
+            <f:facet name="legend">
+                <i class='fa fa-cubes'></i> Gerenciar Produto
+            </f:facet>
             <p:toolbar>
                 <p:toolbarGroup>
                     <p:commandButton value="Novo" actionListener="#{produtoBean.novo()}"
@@ -52,35 +55,35 @@
 
             </p:panelGrid>
 
-            <p:dataTable value="#{produtoBean.entitys}" var="entity"
+            <p:dataTable value="#{produtoBean.entitys}" var="produto"
                          rendered="#{produtoBean.statusTela == 'PESQUISANDO'}">
 
                 <p:column headerText="ID">
-                    <h:outputText value="#{entity.id}"></h:outputText>
+                    <h:outputText value="#{produto.id}"></h:outputText>
                 </p:column>                    
                 <p:column headerText="Nome">
-                    <h:outputText value="#{entity.nome}"></h:outputText>
+                    <h:outputText value="#{produto.nome}"></h:outputText>
                 </p:column>
                 <p:column headerText="Marca">
-                    <h:outputText value="#{entity.marca}"></h:outputText>
+                    <h:outputText value="#{produto.marca}"></h:outputText>
                 </p:column>
                 <p:column headerText="Código de Barras">
-                    <h:outputText value="#{entity.codigoBarras}"></h:outputText>
+                    <h:outputText value="#{produto.codigoBarras}"></h:outputText>
                 </p:column>
                 <p:column headerText="Unidade Medida">
-                    <h:outputText value="#{entity.unidadeMedida}"></h:outputText>
+                    <h:outputText value="#{produto.unidadeMedida}"></h:outputText>
                 </p:column>
                 <p:column headerText="Categoria">
-                    <h:outputText value="#{entity.categoria.nome}"></h:outputText>
+                    <h:outputText value="#{produto.categoria.nome}"></h:outputText>
                 </p:column>
                 <p:column>
-                    <p:commandButton value="Delete" update="@form" icon="fa fa-trash-o"
-                                     actionListener="#{produtoBean.remover(entity)}">
+                    <p:commandButton value="Delete" update="@form"
+                                     actionListener="#{produtoBean.remover(produto)}">
                         <p:confirm header="Confirmação" message="Tem certeza que deseja apagar para sempre?" icon="fa fa-exclamation-triangle" />
                     </p:commandButton>
 
                     <p:commandButton value="Editar" update="@form"
-                                     actionListener="#{produtoBean.editar(entity)}"></p:commandButton>
+                                     actionListener="#{produtoBean.editar(produto)}"></p:commandButton>
                 </p:column>
             </p:dataTable>
             <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
